@@ -21,10 +21,12 @@ function Vessel(name, position, capacity) {
  * @example
  * vessel.report(); // Грузовой корабль. Местоположение: Земля. Товаров нет.
  * @example
- * vesserl.report(); // Грузовой корабль. Местоположение: 50,20. Груз: 200т.
+ * vessel.report(); // Грузовой корабль. Местоположение: 50,20. Груз: 200т.
  * @name Vessel.report
  */
-Vessel.prototype.report = function () {}
+Vessel.prototype.report = function () {
+    return 'Корабль "'+this.name+'". Местоположение: '+this.position+'. Товаров нет.';
+};
 
 /**
  * Выводит количество свободного места на корабле.
