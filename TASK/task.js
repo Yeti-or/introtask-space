@@ -51,7 +51,7 @@ Vessel.prototype.flyTo = function (newPosition) {};
 function Planet(name, position, availableAmountOfCargo) {
     if(!name){throw new Error('All params are necessary');}
     if(!position){throw new Error('All params are necessary');}
-    if(!availableAmountOfCargo){throw new Error('All params are necessary');}
+    if(availableAmountOfCargo === undefined){throw new Error('All params are necessary');}
     if(position.length !== 2){throw new Error('Position must be with two coordinates');}
     if(availableAmountOfCargo<0){throw new Error('Cargo must be positive value');}
     this.name = name;
@@ -64,7 +64,10 @@ function Planet(name, position, availableAmountOfCargo) {
  * @name Planet.report
  */
 Planet.prototype.report = function () {
-
+    var cargo = (this.cargo) ? "Доступно груза: "+this.cargo+"т." : "Грузов нет.";
+    return "Планета \"" + this.name + "\". " +
+        "Местоположение: "+this.position+". "+
+        cargo;
 };
 
 /**
