@@ -42,4 +42,49 @@ describe('Vessel',function(){
           );
        });
     });
+
+    describe('Free space',function(){
+        var marvin;
+        beforeEach(function(){
+            marvin = new Vessel('Marvin',[0,0],2000);
+        });
+
+        it('should have method getFreeSpace()',function(){
+           expect(marvin.getFreeSpace).toBeDefined();
+        });
+        it('should have method getOccupiedSpace()',function(){
+           expect(marvin.getOccupiedSpace).toBeDefined();
+        });
+
+        it('should return free or occupiedSpace',function(){
+           expect(marvin.getFreeSpace()).toBe(2000);
+           expect(marvin.getOccupiedSpace()).toBe(0);
+        });
+    });
+
+    describe('Flying',function(){
+        var marvin;
+        beforeEach(function(){
+            marvin = new Vessel('Marvin',[0,0],2000);
+        });
+
+        it('should have method flyTo()',function(){
+            expect(marvin.flyTo).toBeDefined();
+        });
+        it('should flyTo point',function(){
+            marvin.flyTo([100,200]);
+            expect(marvin.position).toEqual([100,200]);
+        });
+        it('should flyTo planet',function(){
+            var farPlanet = new Planet('Paranoid',[3000,30],4000);
+            marvin.flyTo(farPlanet);
+            expect(marvin.position).toEqual([3000,30]);
+        });
+        it('should not fly to dumb stuff',function(){
+            expect(function(){marvin.flyTo('strawberry field');}).toThrow();
+            expect(function(){marvin.flyTo();}).toThrow();
+            expect(function(){marvin.flyTo([0,100,20]);}).toThrow();
+            expect(function(){marvin.flyTo('=)');}).toThrow();
+        });
+    });
 });

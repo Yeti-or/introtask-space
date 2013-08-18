@@ -1,4 +1,15 @@
 /**
+ * Validate position
+ * @param {Number[]} position
+ * @returns {boolean}
+ */
+var checkPosition = function(position){
+    return position && position.length === 2
+        && typeof position[0] === 'number'
+        && typeof position[1] === 'number'
+};
+
+/**
  * Создает экземпляр космического корабля.
  * @name Vessel
  * @param {String} name Название корабля.
@@ -9,11 +20,14 @@ function Vessel(name, position, capacity) {
     if(!name){throw new Error('All params are required');}
     if(!position){throw new Error('All params are required');}
     if(typeof capacity !== 'number'){throw new Error('All params are required');}
-    if(position.length !==2){throw new Error('Position must be with two coordinates');}
+    if(!checkPosition(position)){
+        throw new Error('Position must be with two coordinates');
+    }
     if(capacity<0){throw new Error('Capacity must be positive value');}
     this.name = name;
     this.position = position;
     this.capacity = capacity;
+    this.cargo = 0;
 }
 
 /**
@@ -32,25 +46,39 @@ Vessel.prototype.report = function () {
  * Выводит количество свободного места на корабле.
  * @name Vessel.getFreeSpace
  */
-Vessel.prototype.getFreeSpace = function () {}
+Vessel.prototype.getFreeSpace = function () {
+    return this.capacity - this.cargo;
+};
 
 /**
  * Выводит количество занятого места на корабле.
  * @name Vessel.getOccupiedSpace
  */
-Vessel.prototype.getOccupiedSpace = function () {}
+Vessel.prototype.getOccupiedSpace = function () {
+    return this.cargo;
+};
 
 /**
  * Переносит корабль в указанную точку.
- * @param {Number}[]|Planet newPosition Новое местоположение корабля.
+ * @param {Number[]|Planet} newPosition Новое местоположение корабля.
  * @example
  * vessel.flyTo([1,1]);
  * @example
  * var earth = new Planet('Земля', [1,1]);
  * vessel.flyTo(earth);
- * @name Vessel.report
+ * @name Vessel.flyTo
  */
-Vessel.prototype.flyTo = function (newPosition) {};
+Vessel.prototype.flyTo = function (newPosition) {
+    if(newPosition.hasOwnProperty('position') && checkPosition(newPosition.position)){
+        this.position = newPosition.position;
+        this.planet = newPosition;
+    }else if(checkPosition(newPosition)){
+        this.position = newPosition;
+        this.planet = null;
+    }else {
+        throw new Error("I wouldn't go there!");
+    }
+};
 
 /**
  * Создает экземпляр планеты.
@@ -63,7 +91,7 @@ function Planet(name, position, availableAmountOfCargo) {
     if(!name){throw new Error('All params are required');}
     if(!position){throw new Error('All params are required');}
     if(typeof availableAmountOfCargo !== 'number'){throw new Error('All params are required');}
-    if(position.length !== 2){throw new Error('Position must be with two coordinates');}
+    if(!checkPosition(position)){throw new Error('Position must be with two coordinates');}
     if(availableAmountOfCargo<0){throw new Error('Cargo must be positive value');}
     this.name = name;
     this.position = position;
