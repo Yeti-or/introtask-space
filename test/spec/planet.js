@@ -70,4 +70,99 @@ describe("A planet", function() {
         });
     });
 
+    describe("port",function(){
+        var mars;
+        var mice;
+        var earth;
+        beforeEach(function(){
+            mars = new Planet('Mars',[100,200],4000);
+            mice = new Vessel("Rockers",[0,0],1000);
+            earth = new Planet('Earth',[300,300],0);
+        });
+
+        it('should have methods load/unloadCargoTo/From()',function(){
+            expect(mars.loadCargoTo).toBeDefined();
+            expect(mars.unloadCargoFrom).toBeDefined();
+            expect(mice.flyTo).toBeDefined();//depends on landing
+        });
+
+        it('should not load to vessel, if vessel not landed',function(){
+            //vessel didn't flyTo(mars)
+            expect(function(){mars.loadCargoTo(mice,100);}).toThrow();
+        });
+
+        it('should not unload from vessel, if vessel not landed',function(){
+            //vessel didn't flyTo(mars)
+            expect(function(){earth.unloadCargoFrom(mice,100);}).toThrow();
+        });
+
+        describe('load',function(){
+            beforeEach(function(){
+                mice.flyTo(mars);
+            });
+
+            it('should loadCargo to vessel',function(){
+                mars.loadCargoTo(mice,1000);
+                expect(mars.getAvailableAmountOfCargo()).toEqual(
+                    "Доступно груза: 3000т."
+                );
+                expect(mice.getFreeSpace()).toBe(0);
+                expect(mice.getOccupiedSpace()).toBe(1000);
+            });
+
+            it('can be load by parts',function(){
+                mars.loadCargoTo(mice,300);
+                mars.loadCargoTo(mice,200);
+                expect(mars.getAvailableAmountOfCargo()).toEqual(
+                    "Доступно груза: 3500т."
+                );
+                expect(mice.getFreeSpace()).toBe(500);
+                expect(mice.getOccupiedSpace()).toBe(500);
+            });
+
+            it('should load valid amount of cargo ',function(){
+                expect(function(){mars.loadCargoTo(mice,-100);}).toThrow();
+                expect(function(){mars.loadCargoTo(mice,"giraffe");}).toThrow();
+            });
+            it('should load amount not bigger then capacity of vessel',function(){
+                expect(function(){mars.loadCargoTo(mice,3000);}).toThrow();
+            });
+            it('should load amount not bigger then planet have',function(){
+                expect(function(){mars.loadCargoTo(mice,5000);}).toThrow();
+            });
+            it('should load to vessel',function(){
+                expect(function(){mars.loadCargoTo("Black hole",100);}).toThrow();
+            });
+        });
+
+        describe('unload',function(){
+            beforeEach(function(){
+                mice.flyTo(mars);
+                mars.loadCargoTo(mice,700);
+                mice.flyTo(earth);
+            });
+
+            it('should unload cargo from vessel',function(){
+                earth.unloadCargoFrom(mice,300);
+                expect(earth.getAvailableAmountOfCargo()).toEqual(
+                    "Доступно груза: 300т."
+                );
+                expect(mice.getFreeSpace()).toBe(600);
+                expect(mice.getOccupiedSpace()).toBe(400);
+            });
+
+            it('should unload valid amount',function(){
+                expect(function(){earth.unloadCargoFrom(mice,-900)}).toThrow();
+                expect(function(){earth.unloadCargoFrom(mice,"giraffe")}).toThrow();
+            });
+            it('should not unload more then vessel has',function(){
+                expect(function(){earth.unloadCargoFrom(mice,900)}).toThrow();
+            });
+            it('should unload from vessel',function(){
+                expect(function(){mars.unloadCargoFrom("Black hole",100);}).toThrow();
+            });
+        });
+
+    });
+
 });

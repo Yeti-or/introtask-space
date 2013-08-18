@@ -27,7 +27,9 @@ function Vessel(name, position, capacity) {
     this.name = name;
     this.position = position;
     this.capacity = capacity;
+
     this.cargo = 0;
+    this.planet = null;
 }
 
 /**
@@ -69,7 +71,7 @@ Vessel.prototype.getOccupiedSpace = function () {
  * @name Vessel.flyTo
  */
 Vessel.prototype.flyTo = function (newPosition) {
-    if(newPosition.hasOwnProperty('position') && checkPosition(newPosition.position)){
+    if(newPosition instanceof Planet && checkPosition(newPosition.position)){
         this.position = newPosition.position;
         this.planet = newPosition;
     }else if(checkPosition(newPosition)){
@@ -122,9 +124,20 @@ Planet.prototype.getAvailableAmountOfCargo = function () {
  * Перед загрузкой корабль должен приземлиться на планету.
  * @param {Vessel} vessel Загружаемый корабль.
  * @param {Number} cargoWeight Вес загружаемого груза.
- * @name Vessel.loadCargoTo
+ * @name Planet.loadCargoTo
  */
-Planet.prototype.loadCargoTo = function (vessel, cargoWeight) {}
+Planet.prototype.loadCargoTo = function (vessel, cargoWeight) {
+    if(!vessel instanceof Vessel) {throw new Error('Hey where is my boat?');}
+    if(typeof cargoWeight !== 'number' || cargoWeight < 0){throw new Error('Bad amount of cargo');}
+    if(cargoWeight > this.cargo){throw new Error("Sorry we have no money");}
+    if(cargoWeight > vessel.capacity){throw new Error("To much for me!");}
+    if(vessel.planet && vessel.planet === this){
+        vessel.cargo += cargoWeight;
+        this.cargo -= cargoWeight;
+    }else {
+        throw new Error('No teleportation sorry');
+    }
+};
 
 /**
  * Выгружает с корабля заданное количество груза.
@@ -132,6 +145,16 @@ Planet.prototype.loadCargoTo = function (vessel, cargoWeight) {}
  * Перед выгрузкой корабль должен приземлиться на планету.
  * @param {Vessel} vessel Разгружаемый корабль.
  * @param {Number} cargoWeight Вес выгружаемого груза.
- * @name Vessel.unloadCargoFrom
+ * @name Planet.unloadCargoFrom
  */
-Planet.prototype.unloadCargoFrom = function (vessel, cargoWeight) {}
+Planet.prototype.unloadCargoFrom = function (vessel, cargoWeight) {
+    if(!vessel instanceof Vessel) {throw new Error('Hey where is my boat?');}
+    if(typeof cargoWeight !== 'number' || cargoWeight < 0){throw new Error('Bad amount of cargo');}
+    if(cargoWeight > vessel.cargo){ throw new Error("You want to much from me!");}
+    if(vessel.planet && vessel.planet === this){
+        vessel.cargo -= cargoWeight;
+        this.cargo += cargoWeight;
+    }else {
+        throw new Error('No teleportation sorry');
+    }
+};
