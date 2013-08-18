@@ -25,7 +25,7 @@ describe("A planet", function() {
     });
 
     describe("Planet report",function(){
-        var mars;
+       var mars;
        beforeEach(function(){
             mars = new Planet('Mars',[0,0],1000);
        });
@@ -47,6 +47,27 @@ describe("A planet", function() {
                "Планета \"Earth\". Местоположение: 20,20. Грузов нет."
            );
        });
-    })
+    });
+
+    describe("Planet amount of cargo",function(){
+        var mars;
+        beforeEach(function(){
+            mars = new Planet('Mars',[0,0],1000);
+        });
+        it("should have getAvailableAmountOfCargo method",function(){
+            expect(mars.getAvailableAmountOfCargo).toBeDefined();
+        });
+        it("should return value of cargo",function(){
+           expect(mars.getAvailableAmountOfCargo()).toEqual(
+               "Доступно груза: 1000т."
+           );
+        });
+        it("should return special string when value is zero",function(){
+            var venus = new Planet('Venus',[100,200],0);
+           expect(venus.getAvailableAmountOfCargo()).toEqual(
+               "Грузов нет."
+           );
+        });
+    });
 
 });
