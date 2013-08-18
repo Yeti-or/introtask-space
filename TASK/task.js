@@ -2,10 +2,19 @@
  * Создает экземпляр космического корабля.
  * @name Vessel
  * @param {String} name Название корабля.
- * @param {Number}[] position Местоположение корабля.
+ * @param {Number[]} position Местоположение корабля.
  * @param {Number} capacity Грузоподъемность корабля.
  */
-function Vessel(name, position, capacity) {}
+function Vessel(name, position, capacity) {
+    if(!name){throw new Error('All params are required');}
+    if(!position){throw new Error('All params are required');}
+    if(typeof capacity !== 'number'){throw new Error('All params are required');}
+    if(position.length !==2){throw new Error('Position must be with two coordinates');}
+    if(capacity<0){throw new Error('Capacity must be positive value');}
+    this.name = name;
+    this.position = position;
+    this.capacity = capacity;
+}
 
 /**
  * Выводит текущее состояние корабля: имя, местоположение, доступную грузоподъемность.
@@ -49,9 +58,9 @@ Vessel.prototype.flyTo = function (newPosition) {};
  * @param {Number} availableAmountOfCargo Доступное количество груза.
  */
 function Planet(name, position, availableAmountOfCargo) {
-    if(!name){throw new Error('All params are necessary');}
-    if(!position){throw new Error('All params are necessary');}
-    if(typeof availableAmountOfCargo !== 'number'){throw new Error('All params are necessary');}
+    if(!name){throw new Error('All params are required');}
+    if(!position){throw new Error('All params are required');}
+    if(typeof availableAmountOfCargo !== 'number'){throw new Error('All params are required');}
     if(position.length !== 2){throw new Error('Position must be with two coordinates');}
     if(availableAmountOfCargo<0){throw new Error('Cargo must be positive value');}
     this.name = name;
