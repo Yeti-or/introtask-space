@@ -39,22 +39,33 @@ Vessel.prototype.getOccupiedSpace = function () {}
  * vessel.flyTo(earth);
  * @name Vessel.report
  */
-Vessel.prototype.flyTo = function (newPosition) {}
+Vessel.prototype.flyTo = function (newPosition) {};
 
 /**
  * Создает экземпляр планеты.
  * @name Planet
  * @param {String} name Название Планеты.
- * @param {Number}[] position Местоположение планеты.
+ * @param {Number[]} position Местоположение планеты.
  * @param {Number} availableAmountOfCargo Доступное количество груза.
  */
-function Planet(name, position, availableAmountOfCargo) {}
+function Planet(name, position, availableAmountOfCargo) {
+    if(!name){throw new Error('All params are necessary');}
+    if(!position){throw new Error('All params are necessary');}
+    if(!availableAmountOfCargo){throw new Error('All params are necessary');}
+    if(position.length !== 2){throw new Error('Position must be with two coordinates');}
+    if(availableAmountOfCargo<0){throw new Error('Cargo must be positive value');}
+    this.name = name;
+    this.position = position;
+    this.cargo = availableAmountOfCargo;
+}
 
 /**
  * Выводит текущее состояние планеты: имя, местоположение, количество доступного груза.
  * @name Planet.report
  */
-Planet.prototype.report = function () {}
+Planet.prototype.report = function () {
+
+};
 
 /**
  * Возвращает доступное количество груза планеты.
