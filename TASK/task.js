@@ -1,12 +1,14 @@
+'use strict';
+
 /**
  * Validate position
  * @param {Number[]} position
  * @returns {boolean}
  */
 var checkPosition = function(position){
-    return position && position.length === 2
-        && typeof position[0] === 'number'
-        && typeof position[1] === 'number'
+    return position && position.length === 2 &&
+        typeof position[0] === 'number' &&
+        typeof position[1] === 'number';
 };
 
 /**
@@ -61,6 +63,24 @@ Vessel.prototype.getOccupiedSpace = function () {
 };
 
 /**
+ * Создает экземпляр планеты.
+ * @name Planet
+ * @param {String} name Название Планеты.
+ * @param {Number[]} position Местоположение планеты.
+ * @param {Number} availableAmountOfCargo Доступное количество груза.
+ */
+function Planet(name, position, availableAmountOfCargo) {
+    if(!name){throw new Error('All params are required');}
+    if(!position){throw new Error('All params are required');}
+    if(typeof availableAmountOfCargo !== 'number'){throw new Error('All params are required');}
+    if(!checkPosition(position)){throw new Error('Position must be with two coordinates');}
+    if(availableAmountOfCargo<0){throw new Error('Cargo must be positive value');}
+    this.name = name;
+    this.position = position;
+    this.cargo = availableAmountOfCargo;
+}
+
+/**
  * Переносит корабль в указанную точку.
  * @param {Number[]|Planet} newPosition Новое местоположение корабля.
  * @example
@@ -81,24 +101,6 @@ Vessel.prototype.flyTo = function (newPosition) {
         throw new Error("I wouldn't go there!");
     }
 };
-
-/**
- * Создает экземпляр планеты.
- * @name Planet
- * @param {String} name Название Планеты.
- * @param {Number[]} position Местоположение планеты.
- * @param {Number} availableAmountOfCargo Доступное количество груза.
- */
-function Planet(name, position, availableAmountOfCargo) {
-    if(!name){throw new Error('All params are required');}
-    if(!position){throw new Error('All params are required');}
-    if(typeof availableAmountOfCargo !== 'number'){throw new Error('All params are required');}
-    if(!checkPosition(position)){throw new Error('Position must be with two coordinates');}
-    if(availableAmountOfCargo<0){throw new Error('Cargo must be positive value');}
-    this.name = name;
-    this.position = position;
-    this.cargo = availableAmountOfCargo;
-}
 
 /**
  * Выводит текущее состояние планеты: имя, местоположение, количество доступного груза.
