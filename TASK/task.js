@@ -43,7 +43,10 @@ function Vessel(name, position, capacity) {
  * @name Vessel.report
  */
 Vessel.prototype.report = function () {
-    return 'Корабль "'+this.name+'". Местоположение: '+this.position+'. Товаров нет.';
+    var cargoMsg = this.cargo ? 'Занято: '+this.cargo+' из '+this.capacity+'т.':'Товаров нет.';
+    return 'Корабль "'+this.name +
+        '". Местоположение: ' +this.position+'. ' +
+        cargoMsg;
 };
 
 /**
